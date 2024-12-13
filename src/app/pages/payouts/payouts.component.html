@@ -1,0 +1,108 @@
+<app-target-login-badge style="padding-bottom: 5px;" (onTargetChange)=changeTarget($event)></app-target-login-badge>
+<div class="main">
+    <div class="info">
+        <div class="coin-select-block">
+            <app-coin-switcher [needAlgorithmButton]=false (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
+        </div>
+        <div class="payouts-table">
+            <nz-table 
+                nzBordered 
+                nzTemplateMode 
+                [nzLoading]="isPayoutsLoading"
+            
+                #rowSelectionTable
+                nzBordered 
+                [nzTemplateMode]="true" 
+                [nzPageSize]="30"
+                nzShowSizeChanger
+                [nzPageSizeOptions] ="[30,50,100,250]"     
+                [nzPageIndex]="1"
+                nzPaginationPosition='both'
+                nzShowPagination
+                [nzData]="payouts"
+                (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+            >
+                <thead>
+                    <tr>
+                        <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority" style="padding: 3px 4px 0px; text-align: center;">{{ column.title }}</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="payouts">
+                    <tr *ngFor="let payout of rowSelectionTable.data" 
+                        [ngClass]="{ 
+                            'strike-through': payout.status === 4 && payout.status !== null,
+                            'light-red-row': payout.status === 4 && payout.status !== null && currentTheme === 'light',
+                            'light-green-row': payout.status === 3 && payout.status !== null && currentTheme === 'light',
+                            'light-yellow-row': payout.status < 3 && payout.status !== null && currentTheme === 'light',
+                            'dark-red-row': payout.status === 4 && payout.status !== null && currentTheme === 'dark',
+                            'dark-green-row': payout.status === 3 && payout.status !== null && currentTheme === 'dark',
+                            'dark-yellow-row': payout.status < 3 && payout.status !== null && currentTheme === 'dark'
+                         }" >
+                        <td style="text-align: center;">{{ payout.time * 1000 | date: "HH:mm dd MMM yyyy" | async }}</td>
+                        <td style="text-align: center;">
+                            <span *ngIf="payout.status === 0 && payout.status !== null">
+                                {{ "common.dictionary.processing" | translate }}
+                            </span>
+                            <span *ngIf="payout.status !== 0 || payout.status === null" class="_clickable" (click)="onTxClick(payout)">
+                                {{ payout.txid }}
+                            </span>
+                        </td>
+                        <td style="text-align: center;">{{ payout.value }}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        <div class="payouts-table-mobile">
+            <nz-table 
+            nzBordered 
+            nzTemplateMode 
+            [nzLoading]="isPayoutsLoading"
+            
+            #mrowSelectionTable
+            class="payouts-mobile _table-mobile" 
+            nzBordered 
+            [nzTemplateMode]="true" 
+            [nzPageSize]="10"
+            [nzPageIndex]="1"
+            nzPaginationPosition='both'
+            nzShowPagination
+            [nzData]="payouts"
+            (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+            >
+            <thead>
+                <tr>
+                    <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority">{{ column.title }}</th>
+                </tr>
+            </thead>
+            <tbody *ngIf="payouts">
+                <tr *ngFor="let payout of mrowSelectionTable.data" 
+                [ngClass]="{ 
+                    'strike-through': payout.status === 4 && payout.status !== null,
+                    'light-red-row': payout.status === 4 && payout.status !== null && currentTheme === 'light',
+                    'light-green-row': payout.status === 3 && payout.status !== null && currentTheme === 'light',
+                    'light-yellow-row': payout.status < 3 && payout.status !== null && currentTheme === 'light',
+                    'dark-red-row': payout.status === 4 && payout.status !== null && currentTheme === 'dark',
+                    'dark-green-row': payout.status === 3 && payout.status !== null && currentTheme === 'dark',
+                    'dark-yellow-row': payout.status < 3 && payout.status !== null && currentTheme === 'dark'
+                 }" >
+                <td style="text-align: center;">{{ payout.time * 1000 | date: "HH:mm dd MMM yyyy" | async }}</td>
+                <td style="text-align: center;">
+                    <span *ngIf="payout.status === 0 && payout.status !== null">
+                        {{ "common.dictionary.processing" | translate }}
+                    </span>
+                    <span *ngIf="payout.status !== 0 || payout.status === null" class="_clickable" (click)="onTxClick(payout)">
+                        {{ truncate(payout.txid) }}
+                    </span>
+                </td>
+                <td style="text-align: center;">{{ payout.value | toFixed }}</td>
+            </tr>
+
+
+
+
+            </tbody>
+        </nz-table>
+        
+        </div>
+    </div>
+</div>

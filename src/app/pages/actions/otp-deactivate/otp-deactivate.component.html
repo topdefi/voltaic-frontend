@@ -1,0 +1,37 @@
+<form
+nz-form
+nzLayout="vertical"
+[formGroup]="otpForm.formData"
+(submit)="otpForm.submit()"
+>
+<nz-form-item>
+    <nz-form-label nzFor="otp">
+        {{ "actions.otpDeactivate.form" | translate }}
+    </nz-form-label>
+    <nz-form-control
+        [nzValidateStatus]="
+        otpForm.errors.otp.status | async
+        "
+        [nzErrorTip]="otpForm.errors.otp.error | async"
+    >
+        <input
+            type="number"
+            formControlName="otp"
+            nz-input
+            id="otp"
+        />
+    </nz-form-control>
+</nz-form-item>
+<nz-form-item>
+    <nz-form-control>
+        <button
+            type="submit"
+            nz-button
+            nzType="primary"
+            [nzLoading]="submitting"
+        >
+            {{ "actions.otpDeactivate.set" | translate }}
+        </button>
+    </nz-form-control>
+</nz-form-item>
+</form>

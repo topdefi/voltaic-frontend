@@ -1,0 +1,31 @@
+:host {
+    display: flex;
+    height: 59px;
+
+    svg {
+        height: 100%;
+    }
+
+    .logo-text {
+        font-size: 28px;
+        color: #fff;
+        text-shadow: 2px 2px 4px #107eff;
+        position: relative;
+        top: 0px;
+        left: 10px;
+    }
+
+    &._iconOnly .logo-text {
+        display: none;
+    }
+
+    &._iconOnly svg {
+        height: 81%;
+    }
+}
+
+@media (max-width: 340px) {
+    .logo-text {
+        display: none;
+    }
+}

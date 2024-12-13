@@ -1,0 +1,11 @@
+<nz-radio-group
+    nzLoading="coinsListLoading"
+    nzTemplateMode="true"
+    nzButtonStyle="solid"
+    [(ngModel)]="activeCoinName"
+    (ngModelChange)="cangeCoin($event)"
+>
+    <label *ngFor="let item of poolCoinsName" nz-radio-button [nzValue]="item">
+        {{ item }}
+    </label>
+</nz-radio-group>

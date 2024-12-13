@@ -1,0 +1,170 @@
+<app-target-login-badge style="padding-bottom: 5px;" (onTargetChange)=changeTarget($event)></app-target-login-badge>
+
+
+<nz-tabset #tabGroup >
+    <nz-tab [nzTitle]="'settings.tab.payment' | translate" >
+        <ng-template nz-tab >
+            <div class="coin-select-block">
+                <app-coin-switcher [needAlgorithmButton]=false (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
+            </div>
+        <form class="settings-form" nz-form nzLayout="vertical" [formGroup]="form" (submit)="savePaymentSettings()">
+                <nz-form-item>
+                    <nz-form-label nzFor="address">
+                        {{ "settings.form.address" | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="address" id="address" [placeholder]="addressPlaceholder"/>
+                    </nz-form-control>
+                </nz-form-item>
+            
+                <nz-form-item>
+            
+                    <nz-form-label nzFor="payoutThreshold">
+                        {{ "settings.form.payoutThreshold" | translate }}
+                    </nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="payoutThreshold" id="payoutThreshold" [placeholder]="minPayPlaceholder" />
+                    </nz-form-control>
+                </nz-form-item>
+            
+                <nz-form-item>
+                    <nz-form-label nzFor="autoPayoutEnabled">
+                        <nz-switch [formControl]="form.get('autoPayoutEnabled')"></nz-switch>
+                        <span class="autoPayoutLabel">
+                            {{ "settings.form.autoPayoutEnabled" | translate }}
+                        </span>
+                    </nz-form-label>
+                </nz-form-item>
+                <div *ngIf="credentials?.has2fa">
+                    <nz-form-item>
+                        <nz-form-label nzFor="totp">
+                            {{ "common.authenticator" | translate }}
+                        </nz-form-label>
+                        <nz-form-control>
+                            <input
+                                type="number"
+                                formControlName="totp"
+                                nz-input
+                                id="totp"
+                                [placeholder]="'settings.totpPlaceholder' | translate"
+                            />
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+        
+
+                <button [disabled]="isDisabled" nz-button nzType="primary" [nzLoading]="isSubmitting">
+                    {{ "settings.form.save.paymentsSettings" | translate }}
+                </button>
+
+
+                <div style="display: inline-table;" >
+                    <nz-alert nzType="warning" 
+                    [nzMessage]="'settings.addressesFormats'| translate: {coin: currentCoin}"
+                    [nzDescription]="addrFormats"
+                    ></nz-alert>
+                </div>
+            </form>
+        </ng-template>
+    </nz-tab>
+    <nz-tab [nzTitle]="'settings.tab.account' | translate" >
+        <ng-template nz-tab>
+
+            <form class="settings-form" nz-form nzLayout="vertical" >
+                <nz-form-item>
+                    <span style="font-weight: bold;">
+                        <nz-form-label nzFor="email">{{ "common.email" | translate }} </nz-form-label>
+                    </span>
+                    <nz-form-control> {{ emailTip }} </nz-form-control>
+                </nz-form-item>
+            </form>
+            <form class="settings-form" nz-form nzLayout="vertical" [formGroup]="auth" >
+                <nz-form-item>
+                    <span style="font-weight: bold;">
+                        <nz-form-label nzFor="faKey">{{ "common.twoFA"  | translate }} </nz-form-label>
+                        <span style="padding-left: 15px;">
+                            <nz-switch [formControl]="auth.get('auth2FAEnabled')" (click)="clickSwitch2FA()" [nzLoading]="loading"></nz-switch>
+                        </span>
+                    </span>
+                </nz-form-item>
+            </form>
+
+
+            <form class="settings-form"
+                nz-form
+                nzLayout="vertical"
+                [formGroup]="formUser.formData"
+                (submit)="saveUserData()"
+            >
+            <nz-form-item>
+                <span style="font-weight: bold;">
+                    {{ "settings.form.registrationDate" | translate }}
+                </span>
+                {{  regDate * 1000
+                    | date: "dd.MM.yy HH:mm"
+                    | async
+                }}
+            </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label nzFor="name" >
+                        <span style="font-weight: bold;">
+                            {{ "settings.form.publicName" | translate }} <i nz-icon [nzType]="'redo'"  [nzTheme]="'outline'" (click)="genName()"></i> 
+                        </span>
+                    </nz-form-label>
+                    <nz-form-control >
+                        <input nz-input formControlName="name" id="name"/>
+                    </nz-form-control>
+                </nz-form-item>
+                <button nz-button nzType="primary" >{{ "settings.form.save.publicName" | translate }}</button>                        
+            </form>
+            
+        </ng-template>
+    </nz-tab>
+
+</nz-tabset>
+
+
+
+
+
+<nz-modal nzWrapClassName="vertical-center-modal" [nzVisible]="key2FAReady" [nzTitle]="'common.twoFA' | translate"
+    [nzFooter]="null" (nzOnCancel)="clear()">
+    {{ "actions.otpActivateReq.success" | translate }}
+
+    <ngx-qrcode 
+    [elementType]="'url'" 
+    [value]="totpUrl"
+    cssClass="aclass"
+    errorCorrectionLevel="M">
+</ngx-qrcode>
+<input
+nz-input
+[value]="totpUrl"
+/>
+</nz-modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

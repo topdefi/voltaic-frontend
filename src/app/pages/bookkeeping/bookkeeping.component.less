@@ -1,0 +1,34 @@
+:host {
+    display: block;
+}
+
+.main {
+    flex-direction: column;
+}
+
+.info {
+    white-space: unset;
+}
+
+.users-table {
+    margin: 2px 0 0;
+}
+
+.users-table-mobile {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    .main {
+        flex-direction: column;
+        padding: 3px 3px;
+    }
+
+    .users-table {
+        display: none;
+    }
+    .users-table-mobile {
+        display: block;
+        padding: 3px 3px 0px;
+    }
+}

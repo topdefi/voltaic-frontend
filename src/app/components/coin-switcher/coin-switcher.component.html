@@ -1,0 +1,26 @@
+
+<nz-select
+style="display: table-row;"
+nzShowSearch
+[(ngModel)]="selectedAlgo"
+(ngModelChange)="onAlgoChange()"
+>
+<nz-option
+    *ngFor="let algo of algos; index as i"
+    [nzLabel]="algo"
+    [nzValue]="i"
+></nz-option>
+</nz-select>
+
+<nz-radio-group
+    *ngIf="coinsListLoading"
+    nzTemplateMode="true"
+    nzButtonStyle="solid"
+    [(ngModel)]="coin"
+    (ngModelChange)="changeCoin($event)"
+>
+    <label *ngFor="let item of coins" nz-radio-button [nzValue]="item">
+        {{ item }}
+    </label>
+</nz-radio-group>
+<!--    nzLoading="coinsListLoading"-->

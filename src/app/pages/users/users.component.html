@@ -1,0 +1,418 @@
+<div class="main">
+<!--
+    <div *ngIf="listOfUsers">
+        <nz-select style="display: inline;" nzMode="tags" nzPlaceHolder="HTR Blocks found by"
+            [(ngModel)]="listOfTagUsers" (ngModelChange)="onUsersForBlocksChange($event)">
+            <nz-option *ngFor="let user of listOfUsers" [nzLabel]="user.login" [nzValue]="user.login"></nz-option>
+        </nz-select>
+        <button nz-button nzType="primary" (click)="getBlocks(1)">{{ " HTR blocks Today " }}</button>
+        <button nz-button nzType="primary" (click)="getBlocks(2)">{{ " HTR blocks Yesterday " }}</button>
+        <button nz-button nzType="primary" (click)="getBlocks(3)">{{ " HTR blocks 3-days ago " }}</button>
+    </div>
+-->
+
+<div class="coin-select-block">
+    <app-coin-switcher (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
+</div>
+
+
+    <div class="info">
+        <div class="users-table">
+            <nz-table 
+                nzBordered
+                nzTemplateMode 
+                #rowSelectionTable 
+                [nzTemplateMode]="true" 
+                [nzPageSize]="30"
+                [nzPageIndex]="1" 
+                nzPaginationPosition='both' 
+                nzShowPagination 
+                nzPaginationType='small'
+                nzShowSizeChanger
+                [nzPageSizeOptions] ="[30,50,100,250,500]"     
+                [nzData]="listOfUsers"
+                
+                (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+                <thead>
+                    <tr>
+                        <th nzWidth="60px"></th>
+                        <th [nzChecked]="checked" [nzIndeterminate]="indeterminate"
+                            (nzCheckedChange)="onAllChecked($event)"></th>
+                        <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare"
+                            [nzSortPriority]="column.priority" style="padding: 3px 4px 0px; text-align: center;">{{
+                            column.title }}</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="listOfUsers">
+
+                    <ng-container *ngFor="let user of rowSelectionTable.data">
+                        <tr>
+                            <td *ngIf="user.login !== 'admin' && user.login !== 'observer'"
+                                [nzExpand]="expandSet.has(user.login)"
+                                (nzExpandChange)="onExpandChange(user.login, $event)"></td>
+                            <td *ngIf="user.login === 'admin' || user.login === 'observer'"></td>
+                            <td *ngIf="user.login !== 'admin' && user.login !== 'observer'"
+                                [nzChecked]="setOfCheckedId.has(user.login)"
+                                [nzDisabled]="user.login === 'admin' || user.login === 'observer'"
+                                (nzCheckedChange)="onItemChecked(user.login, $event)"></td>
+                            <td *ngIf="user.login === 'admin' || user.login === 'observer'"></td>
+
+                            <td *ngIf="user.login === targetLogin" style="font-weight:bold; text-align: center;">
+                                {{user.login }} / {{ user.name }}</td>
+                            <td *ngIf="user.login !== targetLogin" style="text-align: center;"
+                                (click)=onUserClick(user.login)> {{ user.login }} / {{ user.name }}</td>
+                            <td style="text-align: center;"> {{ user.email }}</td>
+                            <td style="text-align: center;"> {{
+                                user.registrationDate * 1000
+                                | date: "dd.MM.yy HH:mm"
+                                | async
+                                }}</td>
+                            <td style="text-align: center;" (click)=onFeePlanClick(user?.feePlanId)> {{ user.feePlanId
+                                }}
+                            </td>
+                            <td style="text-align: center;"> {{ user.power
+                                | metricPrefixify: powerMultLog10
+                                | toFixed
+                                | suffixify: isPrime? ESuffix.PrimePower : ESuffix.Power
+                                }} / {{ user.shareRate}} </td>
+                            <td style="text-align: center;">
+                                <div *ngIf="user.longAgo">
+                                    {{ "users.longAgo" | translate }}
+                                </div>
+                                <div *ngIf="!user.longAgo">
+                                    {{ user.lastShareTime | ago | async }}
+                                </div>
+                            </td>
+                            <td style="text-align: center;"> {{ user.isReadOnly }}</td>
+                        </tr>
+                        <tr [nzExpand]="expandSet.has(user.login)">
+
+
+                            <nz-table [nzData]="user" [nzFrontPagination]="false" [nzShowPagination]="false">
+                <tbody>
+                    <tr>
+                        <td>
+                            <form class="settings-form" nz-form nzLayout="vertical"[formGroup]="formLoginSetup[user.login]">
+                                <nz-form-item>
+                                    <nz-form-label nzFor="publicName" (click)="genName(user.login)"> {{ "common.name" |translate}} <span style="font-weight: bold;"> &nbsp; {{ 'generate' }}</span> </nz-form-label>
+                                    <nz-form-control>
+                                        <input formControlName="publicName" nz-input />
+                                        <button nz-button nzType="primary" (click)="saveSetup('publicName',user.login)">{{ "common.save" |translate }}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label nzFor="password" (click)="genPWD(user.login)"> {{ "common.password" |translate}} <span style="font-weight: bold;"> &nbsp; {{ 'generate' }}</span> </nz-form-label>
+                                    <nz-form-control>
+                                        <input formControlName="password" nz-input />
+                                        <button nz-button nzType="primary" (click)="saveSetup('password',user.login)">{{ "common.save" |translate }}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label nzFor="feePlanId">{{ "common.feePlanId" | translate }}</nz-form-label>
+                                    <nz-form-control>
+                                        <nz-select formControlName="feePlanId" nzShowSearch >
+                                            <nz-option *ngFor="let item of feePlansItems" [nzLabel]="item"[nzValue]="item"></nz-option>
+                                        </nz-select>
+                                        <button nz-button nzType="primary" (click)="saveSetup('feePlanId',user.login)">{{ "common.save" | translate}}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label nzFor="eMail">{{ "common.email" | translate }} </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="eMail"/>
+                                        <button disabled nz-button nzType="primary" (click)="saveSetup('eMail',user.login)">{{ "common.save" | translate}}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label nzFor="gFAKey">{{ "2FA key"}} <span style="font-weight: bold;"> &nbsp; {{ 'generate' }}</span></nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="gFAKey"/>
+                                        <button disabled nz-button nzType="primary" (click)="saveSetup('gFAKey',user.login)">{{ "common.save" | translate}}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <nz-form-item>
+                                    <nz-form-label nzFor="isRreadOnly"><span class="isReadOnly">{{ "createuser.form.isUserReadOnly" | translate}}</span></nz-form-label>
+                                    <nz-form-control>
+                                        <nz-switch formControlName="isReadOnly"></nz-switch>
+                                        <button disabled nz-button nzType="primary" (click)="saveSetup('isReadOnly',user.login)">{{ "common.save" | translate}}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </form>
+                        </td>
+                    </tr>
+
+<!--
+                    <tr>
+                        <td>
+                            <form class="settings-form" nz-form nzLayout="vertical"
+                                [formGroup]="formLoginSetup[user.login]"
+                                (submit)="saveLoginSetup('password',user.login)">
+                                <nz-form-item>
+                                    <nz-form-label nzFor="password" (click)="genPWD(user.login)">{{
+                                        "common.password" | translate
+                                        }}
+                                        <span style="font-weight: bold;"> &nbsp; {{ 'generate' }}</span>
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <input formControlName="password" nz-input />
+                                        <button nz-button nzType="primary">{{ "common.save" | translate }}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form class="settings-form" nz-form nzLayout="vertical" [formGroup]="formUserMail.formData"
+                                (submit)="saveUserMail(user.login)">
+                                <nz-form-item>
+                                    <nz-form-label nzFor="email">{{ "common.email" | translate }} </nz-form-label>
+                                    <nz-form-control>
+                                        <button disabled nz-button nzType="primary">{{ "common.save" | translate
+                                            }}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form class="settings-form" nz-form nzLayout="vertical" [formGroup]="formUser2FA.formData"
+                                (submit)="saveUser2FA(user.login)">
+                                <nz-form-item>
+                                    <nz-form-label nzFor="faKey">{{ "2FA key"}}
+                                        <span style="font-weight: bold;"> &nbsp; {{ 'generate' }}</span>
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <input formControlName="faKey" nz-input id="faKey" />
+                                        <button disabled nz-button nzType="primary">{{ "common.save" | translate
+                                            }}</button>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <form class="settings-form" nz-form nzLayout="vertical"
+                                [formGroup]="formUserReadOnly.formData" (submit)="saveUserReadOnly()">
+                                <nz-form-item>
+                                    <nz-form-label nzFor="isReadOnly">
+                                        <nz-switch [formControl]="formUserReadOnly.formData.get('isReadOnly')">
+                                        </nz-switch>
+                                        <span class="isUserReadOnly">{{ "createuser.form.isUserReadOnly" | translate
+                                            }}</span>
+                                        <button disabled nz-button nzType="primary">{{ "common.save" | translate
+                                            }}</button>
+                                    </nz-form-label>
+                                </nz-form-item>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+
+                            <form class="settings-form" nz-form nzLayout="vertical"
+                                [formGroup]="formUserFeePlan.formData" (submit)="saveFeePlanForUser(user.login)">
+                                <nz-form-item>
+                                    <nz-form-label nzFor="feePlanId">{{ "common.feePlanId" | translate }}
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-select formControlName="feePlanId" nzAllowClear nzShowSearch
+                                            [(ngModel)]="selectedFeePlan">
+                                            <nz-option *ngFor="let item of feePlansItems" [nzLabel]="item"
+                                                [nzValue]="item"></nz-option>
+                                        </nz-select>
+                                    </nz-form-control>
+                                </nz-form-item>
+                                <button nz-button nzType="primary"> {{ "common.save" | translate }}</button>
+                            </form>
+                        </td>
+
+                    </tr>
+                -->
+                </tbody>
+            </nz-table>
+
+
+            </tr>
+            </ng-container>
+
+            </tbody>
+            </nz-table>
+        </div>
+        <div class="users-table-mobile">
+            <nz-table nzBordered nzTemplateMode #mrowSelectionTable nzBordered [nzTemplateMode]="true" [nzPageSize]="30"
+                [nzPageIndex]="1" nzPaginationPosition='both' nzShowPagination [nzData]="listOfUsers"
+                (nzCurrentPageDataChange)="onCurrentPageDataChange($event)">
+                <thead>
+                    <tr>
+                        <th *ngFor="let column of listOfMColumn" [nzSortFn]="column.compare"
+                            [nzSortPriority]="column.priority" style="padding: 3px 4px 0px; text-align: center;">{{
+                            column.title }}</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="listOfUsers">
+                    <tr *ngFor="let user of mrowSelectionTable.data">
+                        <td style="text-align: center;"> {{ user.login }}</td>
+                        <td style="text-align: center;"> {{ user.workers }} </td>
+                        <td style="text-align: center;"> {{ user.power
+                            | metricPrefixify: powerMultLog10
+                            | toFixed
+                            | suffixify: isPrime? ESuffix.PrimePower : ESuffix.Power
+                            }}</td>
+                        <td style="text-align: center;">
+                            <div *ngIf="user.longAgo">
+                                {{ "users.longAgo" | translate }}
+                            </div>
+                            <div *ngIf="!user.longAgo">
+                                {{ user.lastShareTime | ago | async }}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+
+        </div>
+    </div>
+</div>
+<div>
+    Multi Fee Plan setup
+</div>
+<div>
+    <form class="settings-form" nz-form nzLayout="vertical" [formGroup]="formFeePlanForSelectedUsers">
+        <nz-form-item>
+            <nz-form-label nzFor="feePlanId">{{ "common.feePlanId" | translate }}</nz-form-label>
+            <nz-form-control>
+                <nz-select formControlName="feePlanId" nzShowSearch>
+                    <nz-option *ngFor="let item of feePlansItems" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+                <button nz-button nzType="primary" (click)="saveSetup('multiFeePlanId','admin')">{{ "Apply fee plan to checked users" }}</button>
+                </nz-form-control>
+        </nz-form-item>
+    </form>
+</div>
+
+<!--
+<div>
+    Fee Plans setup
+</div>
+<div>
+   <form class="settings-form" nz-form nzLayout="vertical" [formGroup]="formFeePlan.formData">
+        <nz-form-item>
+            <nz-form-label nzFor="feePlanId">{{ "common.feePlanId" | translate }}</nz-form-label>
+            <nz-form-control>
+                <nz-select formControlName="feePlanId" nzShowSearch [(ngModel)]="selectedFeePlan">
+                    <nz-option *ngFor="let item of feePlansItems" [nzLabel]="item" [nzValue]="item"></nz-option>
+                </nz-select>
+            </nz-form-control>
+        </nz-form-item>
+
+        <button disabled nz-button nzType="primary"> {{ "Edit fee plan" }}</button>
+    </form>
+
+</div>
+-->
+<nz-modal nzWrapClassName="vertical-center-modal" [nzVisible]="feePlanDataReady"
+    [nzTitle]="'FeePlan: ' + selectedFeePlanData?.feePlanId" [nzFooter]="null" (nzOnCancel)="clearFeePlanData()">
+
+    <div>
+        <div style="font-weight: bold;">
+            Default Data </div>
+        <nz-table nzBordered [nzData]="selectedDefault" [nzFrontPagination]="false" [nzShowPagination]="false">
+            <thead>
+                <th>ID</th>
+                <th>Fee</th>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let defItem of selectedDefault">
+                    <tr>
+                        <td>
+                            <nz-select style="display: inline;" nzShowSearch [(ngModel)]="defItem.i">
+                                <nz-option *ngFor="let item of listOfUsers; index as in" [nzLabel]="item.login"
+                                    [nzValue]="in"></nz-option>
+                            </nz-select>
+                        </td>
+                        <td>
+                            <form>
+                                <nz-form-item>
+                                    <nz-form-control>
+                                        <input [value]="defItem.percentage" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </form>
+                        </td>
+                    </tr>
+                </ng-container>
+
+                <tr>
+                    <td style="font-weight: bold;">
+                        Total fee
+                    </td>
+                    <td style="font-weight: bold;">
+                        {{selectedFeePlanData?.totalDefault}}
+                    </td>
+                </tr>
+
+            </tbody>
+        </nz-table>
+
+    </div>
+
+    <ng-container *ngFor="let specificItem of selectedSpecific">
+        <div>
+
+            <div>
+                Coin Specific Data for
+                <div style="font-weight: bold;">
+                    {{ specificItem.coin }}
+                </div>
+            </div>
+
+            <nz-table nzBordered [nzData]="specificItem" [nzFrontPagination]="false" [nzShowPagination]="false">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let coinItem of specificItem.config">
+                        <tr>
+                            <td>
+                                <nz-select style="display: inline;" nzShowSearch [(ngModel)]="coinItem.i">
+                                    <nz-option *ngFor="let item of listOfUsers; index as in" [nzLabel]="item.login"
+                                        [nzValue]="in"></nz-option>
+                                </nz-select>
+                            </td>
+                            <td>
+                                <form>
+                                    <nz-form-item>
+                                        <nz-form-control>
+                                            <input [value]="coinItem.percentage" />
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                </form>
+                            </td>
+                        </tr>
+                    </ng-container>
+                    <tr>
+                        <td style="font-weight: bold;">
+                            Total {{ specificItem.coin }} fee
+                        </td>
+                        <td style="font-weight: bold;">
+                            {{specificItem?.total}}
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </nz-table>
+
+
+        </div>
+    </ng-container>
+
+
+</nz-modal>

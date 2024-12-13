@@ -1,0 +1,69 @@
+
+<!--
+<div class="coin-select-block">
+    <app-coin-switcher (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
+</div>
+
+<form class="settings-form" nz-form nzLayout="vertical" [formGroup]="form" (submit)="save()">
+    <nz-form-item>
+        <nz-form-label nzFor="profitSwitchCoeff">
+            {{ "settings.form.profitSwitchCoeff" | translate }}
+        </nz-form-label>
+        <nz-form-control>
+            <input nz-input formControlName="profitSwitchCoeff" id="profitSwitchCoeff" />
+        </nz-form-control>
+    </nz-form-item>
+    <button [disabled]="isDisabled" nz-button nzType="primary" [nzLoading]="isSubmitting">
+        {{ "common.save" | translate }}
+    </button>
+</form>
+ -->
+ <nz-table class="profit-table" *ngIf="profitsReady" nzBordered  
+    [nzTemplateMode]="true">
+    <thead>
+        <tr  style="text-align: center;">
+            <th *ngFor="let title of profitKeys" >
+                {{ "profit.profitKeys.title." + title | translate }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of profitItems" style="word-break: break-all;">
+            <td *ngFor="let key of profitKeys">
+                <ng-container *ngTemplateOutlet="
+                profitssDataTemplate;
+                        context: {
+                            key: key,
+                            value: item
+                        }
+                    "></ng-container>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+
+<ng-template #profitssDataTemplate let-key="key" let-value="value">
+    <ng-container [ngSwitch]="key">
+        <ng-container *ngSwitchCase="'profitSwitchCoeff'">
+            <form nz-form nzLayout="vertical" [formGroup]="form[value.name]" >
+                <nz-form-item>
+                    <nz-form-control>
+                        <input style="max-width: 50%;" nz-input formControlName="profitSwitchCoeff" id="profitSwitchCoeff" />
+                        &nbsp;
+                        <a nzType="link" (click)="save(value)">{{ "common.save" | translate }}</a>
+
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </ng-container>
+        <ng-container *ngSwitchCase="'name'">
+                {{ value.name }}
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+            <span>
+                {{ value }}
+            </span>
+        </ng-container>
+    </ng-container>
+</ng-template>

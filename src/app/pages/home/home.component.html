@@ -1,0 +1,227 @@
+<center>
+    <tbody style="text-align: center;">
+        <br><br><br><br>
+        <img src="https://i.ibb.co/YpPWZ1h/Voltaic-Mining.png" alt="Voltaic-Mining" border="0" width="25%">
+        <br>
+        <div style="font-size: 20px;text-align: center;">
+            Welcome to Voltaic Mining Pool
+        </div>
+        <br>
+        <div style="font-size: 14px;text-align: center;">
+            Enjoy low fee and high-performance LTC/DOGE merged mining!
+        </div>
+        <br>
+        <div style="font-size: 14px;text-align: center;">
+            Ready to get started?<br><br>
+            <button class="enter-link" [routerLink]="EAppRoutes.Monitoring"
+                style="font-size: 20px;text-align: center;background-color: #0b779e;color: white;border:none;border-radius: 6px;">
+                Get Started
+            </button>
+        </div>
+
+    </tbody>
+</center>
+
+
+
+
+
+
+
+
+<!--<div class="sign-up-block">
+    <a class="sign-up-link" [routerLink]="[signUpLink.href]" [queryParams]="signUpLink.params">
+        {{ "home.signUpButton" | translate }}
+    </a>
+</div> -->
+<!--
+<nz-alert *ngIf="true" style="font-weight: bold; padding: 3px;"  nzType="warning" nzShowIcon
+nzMessage="DGB (Digibyte) testnet!"
+nzDescription="This is the Digibyte v8.22.0-RC2 testnet! For sha256 and scrypt this is merged with mainnet Hathor and Dogecoin as well."
+></nz-alert>
+<a nzType="link" href="https://beta.voltaem.io/">Mainnet coins pool here</a> 
+-->
+<!--
+<div class="main">
+    <div class="coins-block">
+        <div class="coin-select-block">
+          <app-coin-switcher (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
+        </div>
+        <div class="pool-info-table">
+            <nz-table style="width: 100%;" nzBordered nzSize="small" [nzTemplateMode]="true" [nzLoading]="isLiveStatLoading">
+                <thead>
+                    <tr>
+                        <th style="min-width: 80px;text-align: center;">{{ "common.dictionary.power" | translate }}</th>
+                        <th style="min-width: 40px;text-align: center;">{{ "common.dictionary.clients" | translate }}
+                        </th>
+                        <th style="min-width: 40px;text-align: center;">{{ "common.dictionary.workers" | translate }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: center;">
+                            {{
+                                liveStats?.power
+                                    | metricPrefixify: liveStats?.powerMultLog10
+                                    | toFixed
+                                    | suffixify: isPrime? ESuffix.PrimePower : ESuffix.Power
+                            }}
+                        </td>
+                        <td style="text-align: center;">{{ liveStats?.clients }}</td>
+                        <td style="text-align: center;">{{ liveStats?.workers }}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        <div class="pool-info-table">
+            <nz-table *ngIf="haveBlocksData && haveLuckData" style="width: 100%;" nzBordered nzSize="small" [nzTemplateMode]="true">
+                <thead>
+                    <tr>
+                        <th style="min-width: 80px;text-align: center;">{{ "home.period" | translate }}</th>
+                        <th style="min-width: 80px;text-align: center;">{{ "home.poolLuck" | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of poolLuck">
+                        <td style="text-align: center;"> {{ item.period }}</td>
+                        <td style="text-align: center;"> {{ item.luck }}</td>
+                    </tr>
+                </tbody>
+            </nz-table>
+
+        </div>
+
+    </div>
+
+    <app-chart class="coin-chart" [mainCoinForChart]="mainChartCoin"></app-chart>
+</div>
+-->
+
+<!--
+<div *ngIf="!haveBlocksData">
+    <thead style="text-align: center;">
+        <span style="padding: 2px; text-align: center; font-size: 22px; font-weight: bold;">
+            {{ "welcome.head" | translate }}
+        </span>
+    </thead>
+    <tbody>
+        <br>
+
+        <div style="font-size: 14px;">
+            {{ "welcome.text1" | translate }}
+        <br>
+            {{ "welcome.text2" | translate }}
+            <br>
+            {{ "welcome.text3" | translate }}
+            <br>
+            {{ "welcome.text4" | translate }}
+            <br>
+            {{ "welcome.text5" | translate }}
+            <br>
+            <br>
+            {{ "welcome.text6" | translate }}
+
+        </div>
+
+    </tbody>
+
+</div>
+-->
+
+<!--
+<nz-table *ngIf="haveBlocksData" class="found-blocks-table" nzBordered [nzTemplateMode]="true"
+    [nzLoading]="isLoadingBlocks">
+    <thead>
+        <tr>
+            <th *ngFor="let title of foundBlockKeys" style="text-align: center;padding: 6px 6px 6px;">
+                {{ "home.foundBlocksTable.title." + title | translate }}
+            </th>
+        </tr>
+        <tr *ngIf="blocks.length == 0" style="text-align: center;">
+            {{ coinName }} {{ "home.foundBlocksTable.content.noBlocks" | translate}}
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let foundBlock of blocks" (click)="onBlockClick(foundBlock)">
+            <td *ngFor="let key of foundBlockKeys" style="text-align: center;padding: 5px 5px 5px;">
+                <ng-container *ngTemplateOutlet="
+                        foundBlockDataTemplate;
+                        context: {
+                            key: key,
+                            value: foundBlock[key]
+                        }
+                    "></ng-container>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+-->
+
+<!--
+<nz-table *ngIf="haveBlocksData" class="found-blocks-table-mobile _table-mobile" nzBordered [nzTemplateMode]="true"
+    [nzLoading]="isLoadingBlocks">
+    <thead>
+        <tr>
+            <th *ngFor="let title of foundBlockKeysMobile" style="text-align: center;padding: 3px 2px 0px;">
+                {{ "home.foundBlocksTable.title." + title | translate }}
+            </th>
+        </tr>
+        <tr *ngIf="blocks.length == 0" style="text-align: center;">
+            {{ CoinName }} {{ "home.foundBlocksTable.content.noBlocks" | translate}}
+        </tr>
+
+    </thead>
+    <tbody>
+        <tr *ngFor="let foundBlock of blocks" (click)="onBlockClick(foundBlock)">
+            <td *ngFor="let key of foundBlockKeysMobile" style="text-align: center;padding: 3px 2px 0px;">
+                <ng-container *ngTemplateOutlet="
+                foundBlockDataTemplateMobile;
+                        context: {
+                            key: key,
+                            value: foundBlock[key]
+                        }
+                    "></ng-container>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+-->
+
+<!--
+<ng-template #foundBlockDataTemplate let-key="key" let-value="value">
+    <ng-container [ngSwitch]="key">
+        <ng-container *ngSwitchCase="'hash'">
+            <span class="found-blocks-hash">
+                {{ value }}
+            </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'time'">
+            {{ value * 1000 | date: "HH:mm dd MMM yyyy " | async }}
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+            <span>
+                {{ value }}
+            </span>
+        </ng-container>
+    </ng-container>
+</ng-template>
+<ng-template #foundBlockDataTemplateMobile let-key="key" let-value="value">
+    <ng-container [ngSwitch]="key">
+        <ng-container *ngSwitchCase="'time'">
+            {{ value * 1000 | date: "HH:mm dd MMM yyyy " | async }}
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'hash'">
+            <span class="found-blocks-hash">
+                {{ truncate(value) }}
+            </span>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+            {{ value }}
+        </ng-container>
+    </ng-container>
+</ng-template>
+-->

@@ -1,0 +1,10 @@
+<nz-radio-group
+    nzTemplateMode="true"
+    nzButtonStyle="solid"
+    [(ngModel)]="activeZoom"
+    (ngModelChange)="cangeZoom($event)"
+>
+    <label *ngFor="let item of zooms" nz-radio-button [nzValue]="item">
+        {{ item }}
+    </label>
+</nz-radio-group>

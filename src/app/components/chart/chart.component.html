@@ -1,0 +1,12 @@
+<div style="text-align: right;padding: 3px;">
+<app-zoom-switcher (onChange)="onZoomChange($event)"></app-zoom-switcher>
+</div>
+<canvas
+    *ngIf="chart"
+    baseChart
+    chartType="line"
+    [datasets]="chart.datasets"
+    [labels]="chart.labels"
+    [options]="chart.options"
+>
+</canvas>

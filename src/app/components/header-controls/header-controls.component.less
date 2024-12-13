@@ -1,0 +1,31 @@
+:host {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & > *:not(:first-child) {
+        margin-left: 15px;
+    }
+}
+
+.flag,
+.flag > svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.theme-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.theme-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    margin-left: 5px;
+}

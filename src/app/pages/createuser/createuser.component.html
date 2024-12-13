@@ -1,0 +1,122 @@
+<form nz-form nzLayout="vertical" [formGroup]="addUserForm.formData" (submit)="addUser()">
+    <nz-form-item>
+        <nz-form-label nzFor="login">
+            {{ "common.login" | translate }}
+        </nz-form-label>
+        <nz-form-control [nzValidateStatus]="addUserForm.errors.login.status | async"
+            [nzErrorTip]="addUserForm.errors.login.error | async">
+            <input formControlName="login" nz-input id="login" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="password" (click)="genPWD()">
+            {{ "common.password" | translate }}
+            <span style="font-weight: bold;"> &nbsp; {{ "common.click" | translate }}</span>
+        </nz-form-label>
+        <nz-form-control [nzValidateStatus]="addUserForm.errors.password.status | async"
+            [nzErrorTip]="addUserForm.errors.password.error | async">
+            <input formControlName="password" nz-input id="password" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="email">
+            {{ "common.email" | translate }}
+        </nz-form-label>
+        <nz-form-control [nzValidateStatus]="addUserForm.errors.email.status | async"
+            [nzErrorTip]="addUserForm.errors.email.error | async">
+            <input formControlName="email" nz-input id="email" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="name" (click)="genName()">
+            {{ "common.name" | translate }}
+            <span style="font-weight: bold;"> &nbsp; {{ "common.click" | translate }}</span>
+        </nz-form-label>
+        <nz-form-control [nzValidateStatus]="addUserForm.errors.name.status | async"
+            [nzErrorTip]="addUserForm.errors.name.error | async">
+            <input formControlName="name" nz-input id="name" />
+        </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+        <nz-form-label nzFor="feePlanId">
+            {{ "common.feePlanId" | translate }}
+        </nz-form-label>
+        <nz-form-control>
+            <nz-select formControlName="feePlanId" nzShowSearch [(ngModel)]="selectedFeePlan">
+                <nz-option *ngFor="let item of feePlansItems" [nzLabel]="item" [nzValue]="item"></nz-option>
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+
+
+    <nz-form-item>
+        <nz-form-label nzFor="isActive">
+            <nz-switch [formControl]="addUserForm.formData.get('isActive')"></nz-switch>
+            <span class="isUserActive">
+                {{ "createuser.form.isUserActive" | translate }}
+            </span>
+        </nz-form-label>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzFor="isReadOnly">
+            <nz-switch [formControl]="addUserForm.formData.get('isReadOnly')"></nz-switch>
+            <span class="isUserReadOnly">
+                {{ "createuser.form.isUserReadOnly" | translate }}
+            </span>
+        </nz-form-label>
+    </nz-form-item>
+
+    <button nz-button nzType="primary" [nzLoading]="isSubmitting">
+        {{ "createuser.form.addUser" | translate }}
+    </button>
+
+
+    <!--
+    <nz-table class="fee-table" nzBordered  
+    [nzTemplateMode]="true">
+    <thead>
+        <tr  style="text-align: center;">
+            <th *ngFor="let title of feeKeys" >
+                {{ title }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of coinItems" style="word-break: break-all;">
+            <td *ngFor="let key of feeKeys">
+                <ng-container *ngTemplateOutlet="
+                feeDataTemplate;
+                        context: {
+                            key: key,
+                            value: item
+                        }
+                    "></ng-container>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+
+<ng-template #feeDataTemplate let-key="key" let-value="value">
+    <ng-container [ngSwitch]="key">
+        <ng-container *ngSwitchCase="'fee'">
+            <form nz-form nzLayout="vertical" [formGroup]="feeForm[value]" >
+                <nz-form-item>
+                    <nz-form-control>
+                        <input style="max-width: 50%;" nz-input formControlName="fee" id="fee" />
+                    </nz-form-control>
+                </nz-form-item>
+            </form>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+            <span>
+                {{ value }}
+            </span>
+        </ng-container>
+    </ng-container>
+</ng-template>
+-->
+
+
+</form>

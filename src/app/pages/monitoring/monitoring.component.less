@@ -1,0 +1,102 @@
+:host {
+    display: block;
+}
+
+.main {
+    display: flex;
+}
+
+.info {
+    white-space: unset;
+}
+
+.coin-select-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.info-table,
+.info-table-mobile {
+    margin-top: 3px;
+}
+
+.info-table-mobile,
+.workers-mobile {
+    display: none;
+}
+
+.coin-chart {
+    flex: 1;
+}
+
+.workers-table {
+    margin-top: 3px;
+}
+
+.worker-state {
+    font-size: 12px;
+
+    &._normal {
+        color: rgb(55, 243, 55);
+    }
+
+    &._warning {
+        color: rgb(251, 255, 28);
+    }
+
+    &._error {
+        color: rgb(255, 40, 40);
+    }
+}
+
+@media (max-width: 992px) {
+    .main {
+        flex-direction: column;
+    }
+
+    .info {
+        flex: 1;
+    }
+
+    .chart {
+        margin-top: 1px;
+        padding-left: 0;
+        width: -moz-fit-content;
+        width: -webkit-fit-content;
+        width: fit-content;
+        margin: auto;
+    }
+
+    .info-table,
+    .workers-table {
+        display: none;
+        margin-top: -10px;
+    }
+
+    .info-table-mobile,
+    .workers-mobile {
+        display: block;
+    }
+
+    .workers-mobile {
+        margin-top: 16px;
+    }
+
+    .worker-mobile-card:not(:last-child) {
+        border-bottom: 1px solid #333;
+        margin-bottom: 6px;
+    }
+
+    .worker-mobile-card-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 6px;
+
+        span {
+            font-weight: bold;
+            margin-left: 6px;
+        }
+    }
+}

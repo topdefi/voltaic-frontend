@@ -1,0 +1,24 @@
+@layout-header-padding: 0;
+@menu-icon-size: 20px;
+
+.@{layout-prefix-cls}-content {
+    padding: 32px 24px;
+}
+
+tbody tr:not(._selected) {
+    cursor: pointer;
+}
+
+._selected td {
+    background-color: @table-row-hover-bg;
+}
+
+._table-mobile {
+    tr > th {
+        padding: 12px 8px 0;
+    }
+
+    tr > td {
+        padding: 0 8px 12px;
+    }
+}

@@ -1,0 +1,15 @@
+<base href="/" />
+
+<router-outlet
+    *ngIf="appService.isReady | async; else spinnerTemplate"
+></router-outlet>
+
+<ng-template #spinnerTemplate>
+    <nz-spin [nzIndicator]="spinnerIndicatorTemplate"> </nz-spin>
+</ng-template>
+
+<ng-template #spinnerIndicatorTemplate>
+    <div class="spinner">
+        <i class="spinner-indicator" nz-icon nzType="loading"></i>
+    </div>
+</ng-template>

@@ -1,0 +1,14 @@
+
+<nz-select
+*ngIf="isReady"
+style="display: inline;"
+nzShowSearch
+[(ngModel)]="selectedIndex"
+(ngModelChange)="onUserChange()"
+>
+<nz-option
+    *ngFor="let item of usersItems; index as i"
+    [nzLabel]="item.login"
+    [nzValue]="i"
+></nz-option>
+</nz-select>

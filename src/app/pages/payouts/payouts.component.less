@@ -1,0 +1,61 @@
+:host {
+    display: block;
+}
+
+.main {
+    flex-direction: column;
+}
+
+.info {
+    white-space: unset;
+}
+
+.coin-select-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.payouts-table {
+    display: block;
+}
+
+.payouts-table-mobile {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    .info {
+        flex: 1;
+    }
+
+    .payouts-table-mobile {
+        display: block;
+    }
+
+    .payouts-table {
+        display: none;
+    }
+}
+.strike-through {
+    text-decoration: line-through;
+}
+.light-green-row {
+    background-color: MintCream;
+  }
+.light-yellow-row {
+    background-color: lightyellow;
+  }
+.light-red-row {
+    background-color: MistyRose;
+  }
+.dark-green-row {
+    background-color: darkolivegreen;
+  }
+.dark-yellow-row {
+    background-color: peru;
+  }
+.dark-red-row {
+    background-color: maroon;
+  }

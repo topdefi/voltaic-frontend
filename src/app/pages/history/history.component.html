@@ -1,0 +1,106 @@
+<app-target-login-badge style="padding-bottom: 5px;" (onTargetChange)=changeTarget($event)></app-target-login-badge>
+<div class="main">
+    <div class="info">
+        <div class="coin-select-block">
+            <app-coin-switcher (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
+        </div>
+        <div class="zoom-select-block">
+            <!--- <app-zoom-switcher (onChange)="onZoomChange($event)"></app-zoom-switcher> --->
+        </div>
+        <div class="history-table">
+            <nz-table 
+                nzBordered 
+                nzTemplateMode 
+                [nzLoading]="!statsHistory"
+                #rowSelectionTable
+                nzBordered 
+                [nzTemplateMode]="true" 
+                [nzPageSize]="30"
+                nzShowSizeChanger
+                [nzPageSizeOptions] ="[30,50,100,250,500,1000]"     
+                [nzPageIndex]="1"
+                nzPaginationPosition='both'
+                nzShowPagination
+                [nzData]="statsHistory"
+                (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+            >
+                <thead>
+                    <tr>
+                        <th *ngFor="let column of listOfColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority" style="padding: 3px 4px 0px; text-align: center;">{{ column.title }}</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="statsHistory">
+                    <tr *ngFor="let item of rowSelectionTable.data">
+                        <td style="text-align: center;">{{ item.time | seconds | date: "shortDate" | async }}</td>
+                        <td style="text-align: center;">
+                            {{ item.shareRate | suffixify: ESuffix.ShareRate }}
+                        </td>
+                        <td style="text-align: center;">
+                            {{
+                                item.power
+                                    | metricPrefixify: powerMultLog10
+                                    | toFixed
+                                    | suffixify: isPrime? ESuffix.PrimePower : ESuffix.Power
+                            }}
+                        </td>
+                        <td style="text-align: center;">
+                            {{ item.shareWork | acceptedDifficulty | toFixed | suffixify }}
+                        </td>
+                                </tr>
+                </tbody>
+            </nz-table>
+
+
+
+
+        </div>
+        <div class="history-table-mobile">
+            <nz-table 
+                nzBordered 
+                nzTemplateMode 
+                [nzLoading]="!statsHistory"
+                #mrowSelectionTable
+                nzBordered 
+                [nzTemplateMode]="true" 
+                [nzPageSize]="10"
+                [nzPageIndex]="1"
+                nzPaginationPosition='both'
+                nzShowPagination
+                [nzData]="statsHistory"
+                (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+            >
+                <thead>
+                    <tr>
+                        <th *ngFor="let column of listOfMColumn" [nzSortFn]="column.compare" [nzSortPriority]="column.priority" style="padding: 3px 4px 0px; text-align: center;">{{ column.title }}</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="statsHistory">
+                    <tr *ngFor="let item of mrowSelectionTable.data">
+                        <td style="text-align: center;">{{ item.time | seconds | date: "shortDate" | async }}</td>
+                        <td style="text-align: center;">
+                            {{
+                                item.power
+                                    | metricPrefixify: powerMultLog10
+                                    | toFixed
+                                    | suffixify: isPrime? ESuffix.PrimePower : ESuffix.Power
+                            }}
+                        </td>
+                        <td style="text-align: center;">
+                            {{ item.shareWork | acceptedDifficulty | toFixed | suffixify }}
+                        </td>
+                                </tr>
+                </tbody>
+            </nz-table>
+
+        </div>
+    </div>
+</div>
+
+<!--
+<nz-modal nzWidth="100%" [nzVisible]="userHistory.ready" [nzTitle]="userHistory?.name"
+    [nzFooter]="null" (nzOnCancel)="clearHistory()">
+    <app-coin-switcher (onChange)="onHistoryCurrentCoinChange($event)"></app-coin-switcher>
+    <app-chart-power [stats]="userHistory.stats" [chartName]="userHistory.coin"
+        [powerMultLog10]="userHistory.powerMultLog10"></app-chart-power>
+</nz-modal>
+-->

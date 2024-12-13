@@ -1,0 +1,246 @@
+<div *ngIf="isReady"> 
+<nz-tabset>
+    <nz-tab [nzTitle]="'auth.tabs.signIn' | translate">
+      <ng-template nz-tab>
+        <form
+        nz-form
+        nzLayout="vertical"
+        [formGroup]="signInForm.formData"
+        (submit)="signInForm.submit()"
+    >
+        <nz-form-item>
+            <nz-form-label nzFor="login">
+                {{ "common.login" | translate }}
+            </nz-form-label>
+            <nz-form-control
+                [nzValidateStatus]="signInForm.errors.login.status | async"
+                [nzErrorTip]="signInForm.errors.login.error | async"
+            >
+                <input formControlName="login" nz-input id="login" />
+                <div *ngIf="signInForm.errors.login.error | async">
+                    {{ "common.wrongLogin" | translate }}
+               </div> 
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="password">
+                {{ "common.password" | translate }}
+            </nz-form-label>
+            <nz-form-control
+                [nzValidateStatus]="
+                    signInForm.errors.password.status | async
+                "
+                [nzErrorTip]="signInForm.errors.password.error | async"
+            >
+                <input
+                    type="password"
+                    formControlName="password"
+                    nz-input
+                    id="password"
+                />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzFor="totp">
+                {{ "common.authenticator" | translate }}
+            </nz-form-label>
+            <nz-form-control
+                [nzValidateStatus]="signInForm.errors.totp.status | async"
+                [nzErrorTip]="signInForm.errors.totp.error | async"
+            >
+                <input
+                    type="number"
+                    formControlName="totp"
+                    nz-input
+                    id="totp"
+                    [placeholder]="'signInForm.totpPlaceholder' | translate"
+                />
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-control>
+                <button
+                    type="submit"
+                    nz-button
+                    nzType="primary"
+                    [nzLoading]="submitting"
+                >
+                    {{ "auth.signIn.form.submitButton" | translate }}
+                </button>
+            </nz-form-control>
+        </nz-form-item>
+    </form>
+</ng-template>
+    </nz-tab>
+    <nz-tab [nzDisabled]="isPPDA" [nzTitle]="'auth.tabs.signUp' | translate">
+        <ng-template nz-tab>
+            <form
+            nz-form
+            nzLayout="vertical"
+            [formGroup]="signUpForm.formData"
+            (submit)="signUpForm.submit()"
+        >
+            <nz-form-item>
+                <nz-form-label nzFor="login">
+                    {{ "common.login" | translate }}
+                </nz-form-label>
+                <nz-form-control
+                    [nzValidateStatus]="signUpForm.errors.login.status | async"
+                    [nzErrorTip]="signUpForm.errors.login.error | async"
+                >
+                    <input formControlName="login" nz-input id="login" />
+                    <div *ngIf="signUpForm.errors.login.error | async">
+                        {{ "common.wrongLogin" | translate }}
+                   </div> 
+    
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label nzFor="publicname" >
+                    {{ "common.name" | translate }}  
+                    <span style="font-weight: bold;">
+                         &nbsp; <i nz-icon [nzType]="'redo'"  [nzTheme]="'outline'" (click)="genName()"></i>
+                    </span>
+                </nz-form-label>
+                <nz-form-control
+                    [nzValidateStatus]="signUpForm.errors.publicname.status | async"
+                >
+                    <input formControlName="publicname" nz-input id="publicname" />
+                </nz-form-control>
+            </nz-form-item>
+
+
+            <nz-form-item>
+                <nz-form-label nzFor="password">
+                    {{ "common.password" | translate }}
+                </nz-form-label>
+                <nz-form-control
+                    [nzValidateStatus]="
+                        signUpForm.errors.password.status | async
+                    "
+                    [nzErrorTip]="signUpForm.errors.password.error | async"
+                >
+                    <input
+                        type="password"
+                        formControlName="password"
+                        nz-input
+                        id="password"
+                    />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzFor="email">
+                    {{ "common.email" | translate }}
+                </nz-form-label>
+                <nz-form-control
+                
+                    [nzValidateStatus]="signUpForm.errors.email.status | async"
+                    [nzErrorTip]="signUpForm.errors.email.error | async"
+                >
+                    <input formControlName="email" nz-input id="email" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control>
+                    <button
+                        type="submit"
+                        nz-button
+                        nzType="primary"
+                        [nzLoading]="submitting"
+                    > 
+                    {{ "auth.signUp.form.submitButton" | translate }}
+                    </button>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+
+
+        </ng-template>
+      </nz-tab>
+      <nz-tab [nzDisabled]="isPPDA" [nzTitle]="'auth.tabs.lostPassword' | translate">
+        <ng-template nz-tab>
+
+            <form
+            nz-form
+            nzLayout="vertical"
+            [formGroup]="lostPassForm.formData"
+            (submit)="lostPassForm.submit()"
+        >
+            <nz-form-item>
+                <nz-form-label nzFor="login">
+                    {{ "common.login" | translate }}
+                </nz-form-label>
+                <nz-form-control
+                    [nzValidateStatus]="lostPassForm.errors.login.status | async"
+                    [nzErrorTip]="lostPassForm.errors.login.error | async"
+                >
+                    <input formControlName="login" nz-input id="login" />
+                    <div *ngIf="lostPassForm.errors.login.error | async">
+                        {{ "common.wrongLogin" | translate }}
+                   </div> 
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-control>
+                    <button
+                        type="submit"
+                        nz-button
+                        nzType="primary"
+                        [nzLoading]="submitting"
+                    >
+                    <!---Still beta. Manual passwordchange. Link to Discord at the homepage.--->
+                    {{ "auth.signIn.form.changePasswordInitiateButton" | translate }}
+                    </button>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+
+
+        </ng-template>
+      </nz-tab>
+      </nz-tabset>
+</div>
+
+
+<!--
+
+<nz-tabset nzLinkRouter>
+            <nz-tab>
+                
+                <a
+                    nz-tab-link
+                    [routerLink]="['.']"
+                    [queryParams]="{ registration: null }"
+                    queryParamsHandling="merge"
+                >
+                    {{ "auth.tabs.signIn" | translate }}
+                </a>
+        
+            </nz-tab>
+            <nz-tab>
+                <a
+                    nz-tab-link
+                    [routerLink]="['.']"
+                    [queryParams]="{ registration: true }"
+                    queryParamsHandling="merge"
+                >
+                   {{ "auth.tabs.signUp" | translate }}
+                </a>
+        
+            </nz-tab>
+            <nz-tab >
+                <a
+                    nz-tab-link
+                    [routerLink]="['.']"
+                    [queryParams]="{ lostPassword: true }"
+                    queryParamsHandling="merge"
+                >
+                    {{ "auth.tabs.lostPassword" | translate }}
+                </a>
+        
+
+            </nz-tab>
+        </nz-tabset>
+
+-->

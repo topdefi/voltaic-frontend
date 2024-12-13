@@ -1,0 +1,47 @@
+:host {
+    display: block;
+    overflow: auto;
+}
+
+.main {
+    flex-direction: column;
+}
+
+.info {
+    white-space: unset;
+}
+
+.coin-select-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3px;
+}
+.zoom-select-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.history-table {
+    display: block;
+}
+
+.history-table-mobile {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    .info {
+        flex: 1;
+    }
+
+    .history-table-mobile {
+        display: block;
+    }
+
+    .history-table {
+        display: none;
+    }
+}

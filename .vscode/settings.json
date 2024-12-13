@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": true,
+    "javascript.implicitProjectConfig.experimentalDecorators": true,
+    "python.formatting.autopep8Args": ["--max-line-length", "180", "--experimental"],
+}

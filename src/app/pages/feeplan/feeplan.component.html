@@ -1,0 +1,107 @@
+<div class="pool-info-table" >
+    <nz-table nzBordered nzTemplateMode [nzTemplateMode]="true"  [nzData]="feePlansItems['feePlansList']">
+        <thead>
+            <tr>
+                <th nzWidth="60px"></th>
+                <th>{{ "feeplan.table.title" | translate }}</th>
+                <th nzWidth="60px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let item of feePlansItems['feePlansList']">
+            <tr>
+                <td [nzExpand]="expandFeePlansSet.has(item)" (nzExpandChange)="onExpandFeePlansChange(item, $event)"></td>
+                <td>{{ item }}</td>
+                <td> <ng-container *ngIf="item!=='default'"> <button disabled="true" nz-button (click)="genPWD()" > {{ "feeplan.bttn.delplan" | translate }} {{ item }}</button></ng-container></td>
+            </tr>
+            
+            <tr [nzExpand]="expandFeePlansSet.has(item)">
+                <nz-table [nzData]="feePlansItems[item]" [nzFrontPagination]="false" [nzShowPagination]="false" [nzTemplateMode]="true" >
+                    <tbody>
+                        <thead>
+                            <tr>
+                                <th nzWidth="60px"></th>
+                                <th nzWidth="60px"> total fee</th>
+                                <th> Coin </th>
+                                <th nzWidth="60px"></th>
+                            </tr>
+                        </thead>
+                        <ng-container *ngFor="let planCoin of feePlansItems[item].coinsList"> 
+                            <tr>
+                                <td [nzExpand]="expandFeeDataSet.has(planCoin)"(nzExpandChange)="onExpandFeeDataChange(planCoin, $event)"></td>
+                                <td>{{ feePlansItems[item][planCoin].totalFee }}</td>
+                                <td>{{ planCoin }}</td>
+                                <td> <button disabled="true" nz-button (click)="genPWD()" > {{ "feeplan.bttn.editplan" | translate }} {{ item}} / {{planCoin }}</button></td>
+                            </tr>
+                           
+                            <tr [nzExpand]="expandFeeDataSet.has(planCoin)">
+                                <nz-table [nzData]="feePlansItems[item][planCoin].config" [nzFrontPagination]="false" [nzShowPagination]="false" [nzTemplateMode]="true" >
+                                    <tbody>
+                                        <thead>
+                                            <tr>
+                                                <th nzWidth="60px">{{ "feeplan.table.percentage" | translate }}</th>
+                                                <th>{{ "feeplan.table.user" | translate }}</th>
+                                            </tr>
+                                        </thead>
+                                        <ng-container *ngFor="let fee of feePlansItems[item][planCoin].config">
+                                            <tr>
+                                                <td>{{ fee?.percentage }}</td>
+                                                <td>{{ fee?.userId }}</td>
+                                            </tr>
+                                        </ng-container>
+                                    <!--- <tr>
+                                        <td>{{ "feeplan.table.total" | translate }}</td>
+                                        <td>{{ feePlansItems[item]['default'].totalFee }}</td>
+                                    </tr> --->
+                                    </tbody>
+                                </nz-table>
+                            </tr>                
+                        </ng-container>
+                        <tr>
+                            <td></td>         
+                            <td></td>         
+                            <td>{{ "feeplan.form.addcoin" | translate }} 
+                                <nz-select style="width:160px" nzShowSearch nzAllowClear> 
+                                    <nz-option *ngFor="let iitem of feePlansItems[item].unusedCoinsList" [nzLabel]="iitem"[nzValue]="iitem"></nz-option> 
+                                </nz-select>
+                            </td>
+                            <td><button disabled="true" nz-button nzType="primary" (click)="genPWD()" >{{ "feeplan.bttn.addcoin" | translate }}</button></td>
+            
+                    </tbody>
+                </nz-table>
+            </tr>
+        </ng-container>
+        <tr>
+            <td></td>         
+            <td>
+                <nz-table [nzTemplateMode]="true" >
+                    <tbody>
+                        <tr>
+                            <td>
+                                {{ "feeplan.form.addplan" | translate }}
+                                <input style="width:150px" nz-input id="newPlanId" /> 
+                            </td>
+                        </tr>                
+                        <tr>
+                            <td>
+                                {{ "feeplan.form.defaultdata" | translate }} 
+                            </td>
+                        </tr>                
+                        <tr>
+                            <td>
+                                {{ "feeplan.form.percent" | translate }} 
+                                <input style="width:60px" nz-input id="newPlanPercent" /> 
+                                {{ "feeplan.form.username" | translate }} 
+                                <nz-select style="width:150px" nzShowSearch nzAllowClear> 
+                                    <nz-option *ngFor="let userLogin of usersList" [nzLabel]="userLogin"[nzValue]="userLogin"></nz-option> 
+                                </nz-select>
+                            </td>
+                            
+                    </tr>                
+                </tbody>
+                </nz-table>
+            </td>
+            <td><button disabled="true" nz-button nzType="primary" (click)="genPWD()" >{{ "feeplan.bttn.addplan" | translate }}</button></td>
+        </tr>
+    </tbody>
+</nz-table>

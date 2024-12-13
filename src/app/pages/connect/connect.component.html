@@ -1,0 +1,110 @@
+<div class="coin-select-block">
+    <app-coin-switcher [needAlgorithmButton]=false (onChange)="onCurrentCoinChange($event)"></app-coin-switcher>
+</div>
+
+
+<nz-alert *ngIf="isBeta" style="font-weight: bold; padding: 3px;"  nzType="warning" nzShowIcon
+    [nzMessage]="'connect.beta.head'| translate"
+    [nzDescription]="'connect.beta'| translate"
+></nz-alert>
+<nz-alert style="font-weight: bold; padding: 3px;" nzType="success"
+    [nzDescription]="'connect.select'| translate"
+></nz-alert>
+
+<nz-table class="instances-table" *ngIf="instancesReady" nzBordered  
+    [nzTemplateMode]="true">
+    <thead>
+        <tr>
+            <th *ngFor="let title of instancesKeys" >
+                {{ "connect.instancesKeys.title." + title | translate }}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of instances" (click)="setInstanceParams(item)" [class._selected]="item.port === port"  style="word-break: break-all;">
+            <td *ngFor="let key of instancesKeys">
+                <ng-container *ngTemplateOutlet="
+                instancesDataTemplate;
+                        context: {
+                            key: key,
+                            value: item[key]
+                        }
+                    "></ng-container>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+ 
+<div *ngIf="instancesReady">
+<nz-alert *ngIf="!etccoin" nzType="success" style="padding: 3px;"
+    [nzMessage]="'connect.toStart.head' | translate: {mode:modeString}"
+    [nzDescription]="'connect.toStart' | translate: {url:urlTarget,user:userName}"
+></nz-alert>
+
+<nz-alert *ngIf="fastJobWarning" style="padding: 3px;" nzType="warning" nzShowIcon
+[nzMessage]="'connect.toStart.fastJobWarning.head' | translate"
+[nzDescription]="'connect.toStart.fastJobWarning' | translate: {coin:fastCoinName}"
+></nz-alert>
+
+<nz-alert *ngIf="algoIsAsicBoost && canAsicBoost" style="padding: 3px;" nzType="success" nzShowIcon
+    [nzMessage]="'connect.asicBoostYes' | translate"
+></nz-alert>
+<nz-alert *ngIf="algoIsAsicBoost && !canAsicBoost" style="padding: 3px;" nzType="error" nzShowIcon
+    [nzMessage]="'connect.asicBoostNo' | translate"
+></nz-alert>
+
+<nz-alert *ngIf="etccoin" style="padding: 3px;" nzType="success" nzShowIcon
+    [nzMessage]="'connect.lolexample' | translate"
+></nz-alert>
+
+<nz-alert *ngIf="!isPPDA && canNiceHash" style="padding: 3px;" nzType="success" nzShowIcon
+    [nzMessage]="'connect.nicehashYes' | translate"
+></nz-alert>
+    
+<nz-alert *ngIf="!isPPDA && !canNiceHash" style="padding: 3px;" nzType="warning" nzShowIcon
+    [nzMessage]="'connect.nicehashNo' | translate"
+></nz-alert>
+    
+    <nz-alert *ngIf="!isPPDA && canMRR" style="padding: 3px;" nzType="success" nzShowIcon
+    [nzMessage]="'connect.mrrYes' | translate"
+    ></nz-alert>
+    
+    <nz-alert *ngIf="!isPPDA && !canMRR" style="padding: 3px;"nzType="warning" nzShowIcon
+    [nzMessage]="'connect.mrrNo' | translate"
+    ></nz-alert>
+
+    <nz-alert *ngIf="!isPPDA" style="padding: 3px;" nzType="info" nzShowIcon
+        [nzMessage]="'connect.payments.head' | translate"
+        [nzDescription]="'connect.payments.smartMode' | translate"
+    ></nz-alert>
+
+    <nz-alert *ngIf="isPPDA" style="padding: 3px;" nzType="info" nzShowIcon
+        [nzMessage]="'connect.payments.head' | translate"
+        [nzDescription]="'connect.payments.ppdaMode' | translate"
+    ></nz-alert>
+
+<nz-alert *ngIf="!isPPDA" style="padding: 3px;" nzType="info" nzShowIcon
+[nzMessage]="'connect.getSupport.smart.head' | translate"
+[nzDescription]="'connect.getSupport.smart' | translate: {mail:emailAddr}"
+></nz-alert>
+</div>
+
+
+<ng-template #instancesDataTemplate let-key="key" let-value="value">
+    <ng-container [ngSwitch]="key">
+        <!--        <ng-container *ngSwitchCase="'hash'">
+            <span class="found-blocks-hash">
+                {{ value }}
+            </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'time'">
+            {{ value * 1000 | date: "dd MMM HH:mm" | async }}
+        </ng-container>
+    -->
+        <ng-container *ngSwitchDefault>
+            <span>
+                {{ value }}
+            </span>
+        </ng-container>
+    </ng-container>
+</ng-template>
